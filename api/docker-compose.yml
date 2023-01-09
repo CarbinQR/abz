@@ -1,0 +1,57 @@
+version: "3.7"
+
+networks:
+    abz:
+
+services:
+    app:
+        build:
+            args:
+                user: work
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: laravel-image
+        container_name: app-abz
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            - abz
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    mysql:
+        image: mysql:5.7.29
+        container_name: mysql-abz
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./docker/mysql:/var/lib/mysql
+        environment:
+            TZ: Europe/Kiev
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - abz
+
+    nginx:
+        image: nginx:1.21.6-alpine
+        container_name: nginx-abz
+        restart: unless-stopped
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/config/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - abz
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
