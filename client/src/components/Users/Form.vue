@@ -4,35 +4,38 @@
     <el-form
         ref="ruleFormRef"
         :model="model"
+        label-position="top"
         label-width="120px"
         class="demo-ruleForm"
         status-icon>
-      <el-form-item label="Full name" prop="name">
-        <el-input v-model="model.name" />
-      </el-form-item>
-      <el-form-item label="Password" prop="password">
-        <el-input v-model="model.password" type="password"/>
-      </el-form-item>
-      <el-form-item label="Confirm password" prop="password_confirmation" type="password">
-        <el-input v-model="model.password_confirmation" />
-      </el-form-item>
-      <el-form-item label="Email" prop="email">
-        <el-input v-model="model.email" />
-      </el-form-item>
-      <el-form-item label="Position" prop="region">
+      <el-form-item label="Position *" prop="position">
         <el-select v-model="model.position_id" placeholder="Position">
           <el-option v-for="position in positions" :key="position.id" :label="position.name" :value="position.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="Phone" prop="phone">
+      <el-form-item label="Full name *" prop="name">
+        <el-input v-model="model.name" />
+      </el-form-item>
+      <el-form-item label="Password *" prop="password">
+        <el-input v-model="model.password" type="password"/>
+      </el-form-item>
+      <el-form-item label="Confirm password *" prop="password_confirmation">
+        <el-input v-model="model.password_confirmation" type="password" />
+      </el-form-item>
+      <el-form-item label="Email *" prop="email">
+        <el-input v-model="model.email" />
+      </el-form-item>
+      <el-form-item label="Phone *" prop="phone">
         <el-input v-model="model.phone" />
       </el-form-item>
-      <el-form-item label="Token" prop="Token">
+      <el-form-item label="Token *" prop="Token">
         <el-input v-model="model.token" />
       </el-form-item>
-      <input type="file" class="form-control" v-on:change="onChange">
+      <el-form-item label="Photo *" prop="Photo">
+        <input type="file" class="form-control" v-on:change="onChange">
+      </el-form-item>
     </el-form>
-    <el-button class="btn btn-primary btn-block" @click="storeModel">Save</el-button>
+    <el-button class="btn btn-primary btn-block mt-5" @click="storeModel">Save</el-button>
   </div>
 </template>
 
@@ -41,7 +44,8 @@ import UserModal from "./Modal.vue";
 import TokenModal from "../Token/Modal.vue";
 import positionService from "../../services/position.js";
 import userService from "../../services/user.js";
-import fileService from "../../services/file.js";
+import {ElNotification} from "element-plus";
+
 export default {
   components: {
     UserModal,
@@ -71,22 +75,33 @@ export default {
     onChange(e) {
       this.model.file = e.target.files[0];
     },
-    upload(e) {
-      e.preventDefault();
-      let existingObj = this;
-      let data = new FormData();
-      data.append('file', this.file);
-      fileService.upload(data)
-          .then(function (res) {
-            existingObj.success = res.data.success;
-          })
-          .catch(function (err) {
-            existingObj.output = err;
-          });
-    },
     storeModel() {
       userService.store(this.model).then(res => {
-        console.log(res);
+        this.onSuccess(res.message);
+      }).catch(e => {
+        this.onError(e.response.data)
+      })
+    },
+    onSuccess(message) {
+      ElNotification({
+        title: 'Success',
+        message: message,
+        type: 'success',
+      })
+    },
+    onError(err) {
+      let errMessage = err.message;
+
+      if(err.fails !== undefined && err.fails.length > 0) {
+        err.fails.forEach(fail => {
+          errMessage = errMessage + " " + fail[0];
+        })
+      }
+
+      ElNotification({
+        title: 'Error',
+        message: errMessage,
+        type: 'error',
       })
     }
   },

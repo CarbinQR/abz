@@ -1,11 +1,11 @@
 <template>
   <el-row class="tac">
-    <el-col :span="24" style="background-color: #545c64; min-height: 100%">
-      <h5 class="mb-2">Custom colors</h5>
+    <el-col :span="24" style="background-color: #b4d1e5; min-height: 100%; border: 1px solid #FFFFFF">
+      <h5 class="mb-2">Menu</h5>
       <el-menu
           active-text-color="#ffd04b"
-          background-color="#545c64"
-          class="el-menu-vertical-demo"
+          background-color="#b4d1e5"
+          class="el-menu-vertical"
           default-active="2"
           text-color="#fff">
         <el-sub-menu index="1">
@@ -13,7 +13,7 @@
             <span>Users</span>
           </template>
           <el-menu-item index="1-1">
-            <router-link to="/users">List</router-link>
+            <router-link to="/">List</router-link>
           </el-menu-item>
           <el-menu-item index="1-2">
             <router-link to="/users/create">Create</router-link>

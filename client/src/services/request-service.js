@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8080/api';
+const API_URL = 'http://ec2-3-71-107-245.eu-central-1.compute.amazonaws.com:8000/api';
 
 const requestService = {
     get(url, params = {}, headers = {}) {

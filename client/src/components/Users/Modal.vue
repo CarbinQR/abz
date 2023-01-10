@@ -8,10 +8,9 @@
         </el-button>
       </div>
     </template>
+    <img v-if="model.photo" :src="getImageUrl(model.photo)" class="el-image__preview">
+    <img v-else :src="defaultImage" class="el-image__preview">
     <el-descriptions :column="6"  direction="vertical" border>
-        <el-descriptions-item label="ID" label-align="center" align="center" label-class-name="my-label" class-name="my-content" >
-            <img :src="model.photo" class="imageproduit">
-        </el-descriptions-item>
       <el-descriptions-item label="ID" label-align="center" align="center" label-class-name="my-label" class-name="my-content" >
             {{ model.id }}
         </el-descriptions-item>
@@ -32,6 +31,9 @@
 </template>
 
 <script>
+import defaultImage from '../../assets/vue.svg';
+import CONSTANTS from "../../constants.js";
+
 export default {
   props: {
     model: {
@@ -41,18 +43,15 @@ export default {
   },
   data() {
     return {
+      defaultImage: defaultImage,
       visible: false,
     }
   },
   methods: {
-    async getImage() {
-      console.log(await 'http://localhost:8080/api/' + this.model.photo)
-      return await 'http://localhost:8080/api/' + this.model.photo;
+    getImageUrl(path) {
+      return CONSTANTS.API_APP_URL + path;
     }
   },
-  mounted() {
-    this.getImage();
-  }
 }
 </script>
 
