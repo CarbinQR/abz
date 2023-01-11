@@ -90,17 +90,9 @@ export default {
       })
     },
     onError(err) {
-      let errMessage = err.message;
-
-      if(err.fails !== undefined && err.fails.length > 0) {
-        err.fails.forEach(fail => {
-          errMessage = errMessage + " " + fail[0];
-        })
-      }
-
       ElNotification({
-        title: 'Error',
-        message: errMessage,
+        title: err.message,
+        message: err.fails,
         type: 'error',
       })
     }

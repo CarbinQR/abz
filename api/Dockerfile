@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     fontconfig \
     libxrender1 \
     xfonts-base \
-    pdftk-java
+    pdftk-java \
+
 
 RUN wget http://security.ubuntu.com/ubuntu/pool/main/libj/libjpeg-turbo/libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb
 RUN dpkg -i libjpeg-turbo8_2.0.3-0ubuntu1.20.04.1_amd64.deb

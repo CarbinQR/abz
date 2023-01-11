@@ -22,6 +22,7 @@ final class TinypngClient
         $destination_path = 'public/images/' . $time;
 
         $path = $image->storeAs($destination_path, $imageName);
+        $url = Storage::disk('public')->url($image);
 
         $savedImage = Storage::disk('local')->get($path);
 
@@ -41,6 +42,6 @@ final class TinypngClient
 
         Storage::disk('public')->put('images/' . $time . '/' . $imageName, $resizedImage);
 
-        return $path;
+        return $url;
     }
 }
